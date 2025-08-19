@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useLogger } from '@/lib/logger'
 import { navigation, socialLinks } from '@/constants'
 
 export default function Header() {
