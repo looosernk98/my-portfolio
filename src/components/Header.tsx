@@ -2,25 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Github, Linkedin, Twitter } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-const navigation = [
-  { name: 'About', href: '#about' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Work History', href: '#work-history' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Services', href: '#services' },
-  { name: 'Blog', href: '#blog' },
-  { name: 'Contact', href: '#contact' },
-]
-
-const socialLinks = [
-  { name: 'GitHub', href: 'https://github.com', icon: Github },
-  { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-  { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-]
+import { navigation, socialLinks } from '@/constants'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)

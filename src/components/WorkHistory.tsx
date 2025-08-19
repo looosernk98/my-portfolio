@@ -5,101 +5,7 @@ import { motion } from 'framer-motion'
 import { Building, Calendar, MapPin, TrendingUp, Users, Code, Lightbulb } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatDate } from '@/lib/utils'
-
-const workExperience = [
-  {
-    id: 1,
-    company: "TechCorp Solutions",
-    position: "Senior Full Stack Developer",
-    location: "San Francisco, CA",
-    startDate: "2022-03-01",
-    endDate: null, // Current job
-    logo: "https://via.placeholder.com/60x60/3B82F6/ffffff?text=TC",
-    description: "Leading development of enterprise-scale applications and mentoring junior developers in modern web technologies.",
-    achievements: [
-      "Led a team of 8 developers to deliver a $2M e-commerce platform",
-      "Improved application performance by 40% through optimization",
-      "Implemented CI/CD pipelines reducing deployment time by 60%",
-      "Mentored 5 junior developers, with 3 receiving promotions"
-    ],
-    technologies: ["React", "Node.js", "TypeScript", "AWS", "Docker", "PostgreSQL"],
-    type: "Full-time",
-    highlights: {
-      teamSize: 8,
-      projectValue: "$2M",
-      performance: "40% improvement"
-    }
-  },
-  {
-    id: 2,
-    company: "StartupXYZ",
-    position: "Full Stack Developer",
-    location: "Remote",
-    startDate: "2020-06-01",
-    endDate: "2022-02-28",
-    logo: "https://via.placeholder.com/60x60/10B981/ffffff?text=SX",
-    description: "Developed MVP and scaled the platform from 0 to 100k+ users. Built the entire tech stack from ground up.",
-    achievements: [
-      "Built MVP that attracted 100k+ users in first year",
-      "Designed and implemented scalable microservices architecture",
-      "Reduced server costs by 45% through efficient resource management",
-      "Integrated payment systems processing $500k+ monthly"
-    ],
-    technologies: ["Vue.js", "Express.js", "MongoDB", "Redis", "Stripe", "AWS"],
-    type: "Full-time",
-    highlights: {
-      userGrowth: "100k+ users",
-      costReduction: "45%",
-      revenue: "$500k/month"
-    }
-  },
-  {
-    id: 3,
-    company: "DigitalAgency Pro",
-    position: "Frontend Developer",
-    location: "Austin, TX",
-    startDate: "2019-01-15",
-    endDate: "2020-05-30",
-    logo: "https://via.placeholder.com/60x60/8B5CF6/ffffff?text=DA",
-    description: "Specialized in creating responsive web applications and collaborating with design teams to deliver pixel-perfect interfaces.",
-    achievements: [
-      "Delivered 25+ responsive websites for diverse clients",
-      "Improved website loading speed by 50% on average",
-      "Collaborated with UI/UX team to increase conversion rates by 30%",
-      "Established component library used across 15+ projects"
-    ],
-    technologies: ["React", "SCSS", "JavaScript", "Webpack", "Figma", "Adobe XD"],
-    type: "Full-time",
-    highlights: {
-      projects: "25+ websites",
-      speedImprovement: "50%",
-      conversionBoost: "30%"
-    }
-  },
-  {
-    id: 4,
-    company: "FreelanceWork",
-    position: "Web Developer",
-    location: "Various",
-    startDate: "2018-06-01",
-    endDate: "2018-12-31",
-    logo: "https://via.placeholder.com/60x60/F59E0B/ffffff?text=FL",
-    description: "Freelance web development projects for small businesses and startups, focusing on modern web technologies.",
-    achievements: [
-      "Completed 15+ projects with 100% client satisfaction",
-      "Specialized in e-commerce and business websites",
-      "Established long-term partnerships with 8 clients",
-      "Generated $75k revenue in 6 months"
-    ],
-    technologies: ["WordPress", "PHP", "JavaScript", "MySQL", "Bootstrap"],
-    type: "Freelance",
-    highlights: {
-      projects: "15+ projects",
-      satisfaction: "100%",
-      revenue: "$75k"
-    }
-  }
-]
+import { simpleWorkHistory, workSummaryStats } from '@/constants'
 
 export default function WorkHistory() {
   const containerVariants = {
@@ -161,7 +67,7 @@ export default function WorkHistory() {
 
             {/* Experience Items */}
             <div className="space-y-12">
-              {workExperience.map((job, index) => (
+              {simpleWorkHistory.map((job, index) => (
                 <motion.div
                   key={job.id}
                   variants={itemVariants}
@@ -276,22 +182,12 @@ export default function WorkHistory() {
             <Card className="bg-gradient-to-r from-primary/10 to-purple-500/10 border-primary/20">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-4 gap-6 text-center">
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">5+</div>
-                    <div className="text-sm text-muted-foreground">Years Experience</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">50+</div>
-                    <div className="text-sm text-muted-foreground">Projects Completed</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">15+</div>
-                    <div className="text-sm text-muted-foreground">Team Members Mentored</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">100%</div>
-                    <div className="text-sm text-muted-foreground">Client Satisfaction</div>
-                  </div>
+                  {workSummaryStats.map((stat, index) => (
+                    <div key={index}>
+                      <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>

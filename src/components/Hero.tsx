@@ -6,15 +6,6 @@ import { ArrowRight, Download, Code, Palette, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import * as d3 from 'd3'
 
-const skills = [
-  { name: 'React', level: 95, color: '#61DAFB' },
-  { name: 'TypeScript', level: 90, color: '#3178C6' },
-  { name: 'Node.js', level: 85, color: '#339933' },
-  { name: 'Python', level: 80, color: '#3776AB' },
-  { name: 'MongoDB', level: 75, color: '#47A248' },
-  { name: 'Next.js', level: 90, color: '#000000' },
-]
-
 export default function Hero() {
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)

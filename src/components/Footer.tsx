@@ -2,37 +2,10 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Heart, ArrowUp, Github, Linkedin, Twitter, Mail } from 'lucide-react'
+import { Heart, ArrowUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getCurrentYear } from '@/lib/utils'
-
-const socialLinks = [
-  { icon: Github, href: 'https://github.com/johndoe', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com/in/johndoe', label: 'LinkedIn' },
-  { icon: Twitter, href: 'https://twitter.com/johndoe_dev', label: 'Twitter' },
-  { icon: Mail, href: 'mailto:john.doe@example.com', label: 'Email' }
-]
-
-const footerLinks = {
-  'Quick Links': [
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Services', href: '#services' },
-    { name: 'Contact', href: '#contact' }
-  ],
-  'Services': [
-    { name: 'Web Development', href: '#services' },
-    { name: 'Mentorship', href: '#services' },
-    { name: 'DSA Coaching', href: '#services' },
-    { name: 'Consultation', href: '#services' }
-  ],
-  'Resources': [
-    { name: 'Blog', href: '#blog' },
-    { name: 'Resume', href: '#' },
-    { name: 'Portfolio', href: '#projects' },
-    { name: 'Skills', href: '#skills' }
-  ]
-}
+import { footerSocialLinks, footerLinks, footerInfo } from '@/constants'
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -47,15 +20,14 @@ export default function Footer() {
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Brand Section */}
             <div className="lg:col-span-2">
-              <h3 className="text-2xl font-bold text-gradient mb-4">Portfolio</h3>
+              <h3 className="text-2xl font-bold text-gradient mb-4">{footerInfo.brandName}</h3>
               <p className="text-muted-foreground mb-6 max-w-md">
-                Full-stack developer passionate about creating exceptional digital experiences 
-                and helping others grow in their tech careers.
+                {footerInfo.description}
               </p>
               
               {/* Social Links */}
               <div className="flex space-x-4">
-                {socialLinks.map((social) => (
+                {footerSocialLinks.map((social) => (
                   <motion.a
                     key={social.label}
                     href={social.href}
@@ -106,14 +78,14 @@ export default function Footer() {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © {getCurrentYear()} John Doe. Made with{' '}
+              © {getCurrentYear()} {footerInfo.authorName}. Made with{' '}
               <Heart className="inline w-4 h-4 text-red-500 mx-1" />
               using Next.js & TypeScript
             </p>
             
             <div className="flex items-center gap-4">
               <span className="text-muted-foreground text-sm">
-                Available for new projects
+                {footerInfo.statusText}
               </span>
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <Button
