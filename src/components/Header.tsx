@@ -11,21 +11,49 @@ import { navigation, socialLinks } from '@/constants'
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const log = useLogger('Header')
 
   useEffect(() => {
+    log.onMount()
+    
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      const scrollY = window.scrollY
+      const newScrolled = scrollY > 50
+      
+      if (newScrolled !== scrolled) {
+        setScrolled(newScrolled)
+        log.debug(`Scroll state changed: ${newScrolled ? 'scrolled' : 'top'}`, { scrollY })
+      }
     }
+    
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      log.onUnmount()
+    }
+  }, [scrolled, log])
 
   const handleNavClick = (href: string) => {
+    const startTime = performance.now()
+    
     setIsOpen(false)
+    log.trackUserAction('navigation-click', { href, fromMobile: isOpen })
+    
     const element = document.querySelector(href)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
+      const duration = performance.now() - startTime
+      log.trackPerformance('smooth-scroll', duration)
+      log.info(`Navigated to section: ${href}`)
+    } else {
+      log.warn(`Navigation target not found: ${href}`)
     }
+  }
+
+  const handleMobileMenuToggle = () => {
+    const newState = !isOpen
+    setIsOpen(newState)
+    log.trackUserAction('mobile-menu-toggle', { isOpen: newState })
   }
 
   return (
@@ -52,6 +80,7 @@ export default function Header() {
               className="text-2xl font-bold text-gradient"
               onClick={(e) => {
                 e.preventDefault()
+                log.trackUserAction('logo-click', { action: 'scroll-to-top' })
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
             >
@@ -91,6 +120,13 @@ export default function Header() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="text-muted-foreground hover:text-primary transition-colors"
+                onClick={() => {
+                  log.trackUserAction('social-link-click', { 
+                    platform: social.name, 
+                    href: social.href,
+                    location: 'desktop-header'
+                  })
+                }}
               >
                 <social.icon className="h-5 w-5" />
               </motion.a>
@@ -102,7 +138,7 @@ export default function Header() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={handleMobileMenuToggle}
               className="text-foreground"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -139,6 +175,13 @@ export default function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => {
+                    log.trackUserAction('social-link-click', { 
+                      platform: social.name, 
+                      href: social.href,
+                      location: 'mobile-header'
+                    })
+                  }}
                 >
                   <social.icon className="h-5 w-5" />
                 </a>

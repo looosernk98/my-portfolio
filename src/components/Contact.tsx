@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Mail, 
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useLogger } from '@/lib/logger'
 
 import { contactInfo, contactSocialLinks } from '@/constants'
 
@@ -31,35 +32,76 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const log = useLogger('Contact')
+
+  useEffect(() => {
+    log.onMount()
+    return () => log.onUnmount()
+  }, [log])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
+    })
+    
+    // Log form field interactions (without logging sensitive data)
+    log.debug(`Form field updated: ${name}`, { 
+      fieldName: name, 
+      hasValue: value.length > 0,
+      valueLength: value.length
     })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const startTime = performance.now()
+    
     setIsSubmitting(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    // Log form submission attempt
+    log.trackFormSubmission('contact-form', false, {
+      hasName: formData.name.length > 0,
+      hasEmail: formData.email.length > 0,
+      hasSubject: formData.subject.length > 0,
+      hasMessage: formData.message.length > 0,
+      projectType: formData.projectType,
+      attemptedAt: new Date().toISOString()
+    })
     
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-        projectType: ''
+    try {
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      const duration = performance.now() - startTime
+      log.trackPerformance('form-submission', duration)
+      log.trackFormSubmission('contact-form', true, {
+        submissionDuration: duration,
+        completedAt: new Date().toISOString()
       })
-    }, 3000)
+      
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          projectType: ''
+        })
+        log.info('Contact form reset after successful submission')
+      }, 3000)
+      
+    } catch (error) {
+      log.error('Form submission failed', error)
+      setIsSubmitting(false)
+    }
   }
 
   const containerVariants = {
